@@ -1,0 +1,33 @@
+package config
+
+import (
+	"os"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/joho/godotenv"
+)
+
+var (
+	db *gorm.DB
+)
+
+func Connect() {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		panic(err)
+	}
+
+	dbInstance, err := gorm.Open("mysql", os.Getenv("DB_URL"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	db = dbInstance
+}
+
+func GetDB() *gorm.DB {
+	return db
+}
