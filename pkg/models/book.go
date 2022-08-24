@@ -24,3 +24,29 @@ func init() {
 	// It WON’T delete unused columns to protect your data
 	db.AutoMigrate(&Book{})
 }
+
+func (book *Book) CreateBook() *Book {
+	if db.NewRecord(book) {
+		db.Create(&book)
+	}
+
+	return book
+}
+
+func GetAllBooks() []Book {
+	var Books []Book
+	db.Find(&Books)
+	return Books
+}
+
+func GetBookById(Id int64) (*Book, *gorm.DB) {
+	var book Book
+	db.Where("ID=?", Id).Find(&book)
+	return &book, db
+}
+
+func DeleteBookById(Id int64) Book {
+	var book Book
+	db.Where("ID=?", Id).Find(&book)
+	return book
+}
